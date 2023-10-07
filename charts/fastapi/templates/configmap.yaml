@@ -14,6 +14,6 @@ spec:
         spec:
             containers:
             - name: fastapi-container
-              image: pyt:latest
+              image: pyt:local
               ports:
               - containerPort: 8000

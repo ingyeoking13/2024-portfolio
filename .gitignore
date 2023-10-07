@@ -1,4 +1,4 @@
-
+registry/registry-volume/**
 venv/**
 idea
 ipynb_checkpoints
