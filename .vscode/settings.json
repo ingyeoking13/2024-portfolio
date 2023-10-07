@@ -1,0 +1,15 @@
+{
+    "folders": [
+      {
+        "path": "frontend",
+        "name": "Frontend"
+      },
+      {
+        "path": "backend",
+        "name": "Backend"
+      }
+    ],
+    "settings": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  }
