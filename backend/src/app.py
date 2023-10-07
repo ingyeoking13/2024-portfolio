@@ -25,10 +25,17 @@ async def connect_k8s():
         'message': config.list_kube_config_contexts()
     }
 
+@app.get('/k8s/pods')
+async def get_pods():
+    with client.ApiClient() as api_client:
+        result = client.V1PodList()
+    return {
+        'meesage': result
+    }
+
 
 @app.get('/dashboard')
 async def read_dashboard():
-    config.load_kube_config()
     return {
         'message': config.list_kube_config_contexts()
     }

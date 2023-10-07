@@ -9,10 +9,6 @@
 			"path": "../backend/"
 		},
 		{
-			"name": "scripts",
-			"path": "../scripts/"
-		},
-		{
 			"name": "charts",
 			"path": "../charts/"
 		}
