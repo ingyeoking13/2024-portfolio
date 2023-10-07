@@ -1,0 +1,42 @@
+{
+  "message": [
+    [
+      {
+        "context": {
+          "cluster": "minikube",
+          "extensions": [
+            {
+              "extension": {
+                "last-update": "Sat, 07 Oct 2023 02:35:12 KST",
+                "provider": "minikube.sigs.k8s.io",
+                "version": "v1.28.0"
+              },
+              "name": "context_info"
+            }
+          ],
+          "namespace": "default",
+          "user": "minikube"
+        },
+        "name": "minikube"
+      }
+    ],
+    {
+      "context": {
+        "cluster": "minikube",
+        "extensions": [
+          {
+            "extension": {
+              "last-update": "Sat, 07 Oct 2023 02:35:12 KST",
+              "provider": "minikube.sigs.k8s.io",
+              "version": "v1.28.0"
+            },
+            "name": "context_info"
+          }
+        ],
+        "namespace": "default",
+        "user": "minikube"
+      },
+      "name": "minikube"
+    }
+  ]
+}

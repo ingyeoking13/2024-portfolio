@@ -1,0 +1,8 @@
+{
+    "python.defaultInterpreterPath": ".venv/bin/python",
+    "editor.colorDecorators": true,
+    "editor.rulers": [80, 110],
+    "workbench.colorCustomizations": {
+        "editorLineNumber.activeForeground": "#31ff35"
+    }
+}
