@@ -1,0 +1,7 @@
+{
+    "editor.rulers": [ 80, 110 ],
+    "workbench.colorTheme": "Monokai Dimmed",
+    "workbench.colorCustomizations": {
+        "editorLineNumber.activeForeground": "#342ef1"
+    }
+}
