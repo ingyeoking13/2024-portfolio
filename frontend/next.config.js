@@ -2,8 +2,8 @@
 const nextConfig = {
     env: {
         mode: 'dev'
-    }
-
+    },
+    reactStrictMode: false
 }
 
 module.exports = nextConfig

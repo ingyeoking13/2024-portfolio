@@ -20,7 +20,6 @@ export const getServerSideProps = async () => {
       },
     };
   } catch (e) {
-    console.error('^^',  e)
     return {
       props: {
         data: null
