@@ -1,0 +1,28 @@
+{
+  "meesage": [
+    {
+      "status": {
+        "_host_ip": "192.168.49.2",
+        "_phase": "Running",
+        "_pod_ip": "172.17.0.6"
+      },
+      "metadata": {
+        "_namespace": "default",
+        "_labels": {"app": "fastapi", "pod-template-hash": "5795967c76"},
+        "_name": "webserver-deployment-5795967c76-j92lt"
+      }
+    },
+    {
+      "status": {
+        "_host_ip": "192.168.49.2",
+        "_phase": "Running",
+        "_pod_ip": "172.17.0.2"
+      },
+      "metadata": {
+        "_namespace": "default",
+        "_labels": {"app": "fastapi", "pod-template-hash": "5795967c76"},
+        "_name": "webserver-deployment-5795967c76-m449f"
+      }
+    }
+  ]
+}

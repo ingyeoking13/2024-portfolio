@@ -2,6 +2,7 @@
     "python.defaultInterpreterPath": ".venv/bin/python",
     "editor.colorDecorators": true,
     "editor.rulers": [80, 110],
+    "editor.defaultFormatter": "ms-python.autopep8",
     "workbench.colorCustomizations": {
         "editorLineNumber.activeForeground": "#31ff35"
     }
