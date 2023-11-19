@@ -5,5 +5,10 @@
     "editor.defaultFormatter": "ms-python.autopep8",
     "workbench.colorCustomizations": {
         "editorLineNumber.activeForeground": "#31ff35"
-    }
+    },
+    "python.testing.pytestArgs": [
+        "src"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

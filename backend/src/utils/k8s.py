@@ -2,6 +2,9 @@ from kubernetes import client, config
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
+from src.utils.logger.logger import get_logger
+
+_logger  = get_logger(__file__)
 
 class K8SConfigure:
     _client = None
@@ -10,11 +13,15 @@ class K8SConfigure:
         self.load_config()
 
     def load_config(self):
-        if self._client is None:
-            config.load_kube_config()
-            self._client = client.CoreV1Api()
-        
-        return self._client
+        try:
+            if self._client is None:
+                config.load_kube_config()
+                self._client = client.CoreV1Api()
+            
+            return self._client
+        except Exception as e:
+            _logger.exception(e)
+            return self._client
     
     @property
     def client(self):
