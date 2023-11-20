@@ -3,7 +3,7 @@ import re
 import yaml
 import os
 
-env_pattern = re.compile(r'\$\{\{\s*(\w+)\s*\}\}([^:]*)?(:\s*(\w+)\s*)?')
+env_pattern = re.compile(r'\$\{\{\s*(\w+)\s*\}\}([^:]*)?(:\s*(.*)\s*)?')
 
 def load_yaml(file_path: Path):
     with open(file_path) as f:
