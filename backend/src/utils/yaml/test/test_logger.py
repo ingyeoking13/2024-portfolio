@@ -15,6 +15,8 @@ def test_load_yaml(monkeypatch):
             name: bye:flah
             env: ${{ exist_env }}
             source: ${{ none_env}}:noworld
+        test3: 
+            name: ${{ exist_env }}/log.log
     """
     monkeypatch.setenv('exist_env', 'hello world')
     result = replace_env_from_yaml(yaml.safe_load(_yaml))
@@ -28,5 +30,8 @@ def test_load_yaml(monkeypatch):
             'name': 'bye:flah',
             'env': 'hello world',
             'source': 'noworld'
+        },
+        'test3': {
+            'name': 'hello world/log.log'
         }
     }

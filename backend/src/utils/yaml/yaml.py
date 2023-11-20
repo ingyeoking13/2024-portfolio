@@ -3,7 +3,7 @@ import re
 import yaml
 import os
 
-env_pattern = re.compile(r'\$\{\{\s*(\w+)\s*\}\}(:\s*(\w+)\s*)?')
+env_pattern = re.compile(r'\$\{\{\s*(\w+)\s*\}\}([^:]*)?(:\s*(\w+)\s*)?')
 
 def load_yaml(file_path: Path):
     with open(file_path) as f:
@@ -23,9 +23,10 @@ def replace_env_from_yaml(item):
             
             grouped = matched.groups()
             if os.environ.get(grouped[0],None):
-                item[k] = os.environ.get(grouped[0])
+                item[k] = os.environ.get(grouped[0]) +\
+                    (grouped[1] if grouped[1] else '')
             else:
-                item[k] = grouped[2]
+                item[k] = grouped[3]
 
         if isinstance(v, int):
             item[k] = v

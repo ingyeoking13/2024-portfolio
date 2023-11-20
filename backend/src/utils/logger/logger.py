@@ -8,7 +8,7 @@ def load_logging_config():
     global logging_config
 
     if logging_config is None:
-        file_path = Path.joinpath(Path(__file__).parent, '..', 'settings.yaml') 
+        file_path = Path.joinpath(Path(__file__).parent, '..', '..', 'settings.yaml') 
         config.dictConfig(load_yaml(file_path)['logger'])
         logging_config = True
 
