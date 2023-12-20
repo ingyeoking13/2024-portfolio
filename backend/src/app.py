@@ -11,4 +11,5 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-app.include_router(K8SRouter)
+k8s = K8SRouter()
+app.include_router(k8s.router)
