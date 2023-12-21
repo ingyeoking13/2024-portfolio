@@ -4,17 +4,23 @@ from fastapi import APIRouter, HTTPException
 from src.models.k8s.k8s import KubeContainer, KubePod, KubePodMetadata, KubePodStatus
 from kubernetes import client, config
 from src.utils.k8s import K8SConfigure
+from src.models.response.response import BasicResponse, Content
 
 class K8SRouter:
     router = APIRouter(prefix='/v1/k8s')
 
-    @router.post('/connect')
-    async def connect_k8s():
+    @router.post('/connect', response_model=BasicResponse[bool])
+    async def connect():
         config = K8SConfigure().load_config()
-        result = config.list_kube_config_contexts()[1]
-        return {
-            'message': result
-        }
+        if config:
+            return BasicResponse(Content(
+                    data=True,
+                )
+            )
+        else:
+            return BasicResponse(Content(
+                data=False
+            ))
 
     @router.get('/pods')
     async def get_pods():
