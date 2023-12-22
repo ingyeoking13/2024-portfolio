@@ -14,5 +14,5 @@ class AuthRouter:
 
     @router.post('/signup')
     async def signup(db: UserRepo = Depends(UserRepo)):
-        result = db.session.query(User).all()
+        result = db.db.query(User).all()
 
