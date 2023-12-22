@@ -9,10 +9,9 @@ from src.models.response.response import BasicResponse, Content
 class K8SRouter:
     router = APIRouter(prefix='/v1/k8s')
 
-    @router.post('/connect', response_model=BasicResponse[bool])
+    @router.post('/connect')
     async def connect():
         config = K8SConfigure().load_config()
-        result = config.list_namespaced_config_map('default')
         if config:
             return BasicResponse(Content(
                     data=True,
@@ -23,7 +22,7 @@ class K8SRouter:
                 data=False
             ))
 
-    @router.get('/pods', response_model=BasicResponse[list[KubePod]])
+    @router.get('/pods')
     async def get_pods():
         v1 = client.CoreV1Api()
         pods = v1.list_namespaced_pod('default')
@@ -34,7 +33,7 @@ class K8SRouter:
                 }) for _kubepod in pods.items
             ]
         return BasicResponse(
-            Content(result)
+            Content(data=result)
         )
         
 
