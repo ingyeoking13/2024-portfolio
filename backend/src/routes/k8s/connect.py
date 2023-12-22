@@ -12,6 +12,7 @@ class K8SRouter:
     @router.post('/connect', response_model=BasicResponse[bool])
     async def connect():
         config = K8SConfigure().load_config()
+        result = config.list_namespaced_config_map('default')
         if config:
             return BasicResponse(Content(
                     data=True,
@@ -22,7 +23,7 @@ class K8SRouter:
                 data=False
             ))
 
-    @router.get('/pods')
+    @router.get('/pods', response_model=BasicResponse[list[KubePod]])
     async def get_pods():
         v1 = client.CoreV1Api()
         pods = v1.list_namespaced_pod('default')
@@ -32,9 +33,10 @@ class K8SRouter:
                 'metadata': KubePodMetadata(**_kubepod.metadata.__dict__)
                 }) for _kubepod in pods.items
             ]
-        return {
-            'meesage': result
-        }
+        return BasicResponse(
+            Content(result)
+        )
+        
 
     @router.get('/dashboard')
     async def read_dashboard():

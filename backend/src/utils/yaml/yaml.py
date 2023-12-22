@@ -5,7 +5,9 @@ import os
 
 env_pattern = re.compile(r'\$\{\{\s*(\w+)\s*\}\}([^:]*)?(:\s*(.*)\s*)?')
 
-def load_yaml(file_path: Path):
+def load_settings():
+    file_path = Path.joinpath(Path(__file__).parent,
+                              '..', '..', 'settings.yaml')
     with open(file_path) as f:
         yml = yaml.safe_load(f)
         result = replace_env_from_yaml(yml)

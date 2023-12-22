@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.routes.k8s.connect import K8SRouter
+from src.routes.auth.auth import AuthRouter
 
 app = FastAPI()
 app.add_middleware(
@@ -12,4 +13,6 @@ app.add_middleware(
 )
 
 k8s = K8SRouter()
+auth = AuthRouter()
 app.include_router(k8s.router)
+app.include_router(auth.router)
