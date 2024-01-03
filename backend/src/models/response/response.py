@@ -19,6 +19,3 @@ class BasicResponse[T](Response):
                  background: BackgroundTask | None = None) -> None:
         super().__init__(content.json(), status_code, headers, media_type, background)
 
-
-
-
