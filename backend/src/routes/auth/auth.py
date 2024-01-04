@@ -12,19 +12,15 @@ class AuthRouter:
     @router.post('/signup', response_model=Content[bool])
     async def signup(auth: Auth, db: UserRepo = Depends(UserRepo)):
         try:
-            salt = bcrypt.gensalt()
-            with db.session as session:
-                session.add(User(name=auth.name,
-                                 nickname=auth.nickname,     
-                                 email=auth.email, 
-                                 password=bcrypt.hashpw(
-                                     auth.password.encode('utf-8'),
-                                     salt
-                                 ),
-                                 salt=salt
-                                 ))
+            if not db.check_user_exist(auth.name):
+                db.add_user(auth)
+            else:
+                raise Exception('사용자가 존재합니다.')
         except Exception as e:
-            return BasicResponse(Content(data=False, error_message=e))
+            return BasicResponse(
+                Content(data=False, 
+                        error_code=100,
+                        error_message=e.args[0]))
         return BasicResponse(Content(data=True))
     
     @router.get('/users')
