@@ -12,4 +12,3 @@ class User(Base):
     nickname: Mapped[str] =  Column(String(36), index=True)
     email: Mapped[str] = Column(String(64), index=True)
     password: Mapped[str] = Column(String(64))
-    salt: Mapped[str] = Column(String(32))
