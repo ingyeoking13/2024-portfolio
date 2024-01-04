@@ -54,4 +54,11 @@ class UserRepo:
         with self.session as session:
             result = session.query(User).filter(User.name == name).first()
         return result
-        
+    
+    def check_password(self, auth: Auth) -> bool:
+        with self.session as session:
+            result = session.query(User).filter(User.name == auth.name).first()
+            return bcrypt.checkpw(
+                auth.password.encode('utf-8'),
+                result.password.encode('utf-8')
+            )
