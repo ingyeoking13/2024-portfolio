@@ -1,18 +1,17 @@
 import styles from './page.module.css';
-import { Typography, Paper, AppBar, Toolbar, IconButton, Box } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Link from 'next/link';
 
 import React, {useEffect, useState} from 'react';
 
-import {Typography, Paper, AppBar, Toolbar, IconButton} from '@mui/material';
-import {Box} from '@mui/system';
+import {Typography, Paper, AppBar, Toolbar, IconButton, Box} from '@mui/material';
 import {PlayCircleFilledOutlined} from '@mui/icons-material';
-import {Request} from '@@/common/fetch';
+import {request} from '@@/common/fetch';
 import {NextPage, NextPageContext} from 'next';
+import { AppBarComponent } from '@@/components/AppBar';
 
 const dashboardQuery = async () => {
-  const res = await Request<any>('/dashboard');
+  const res = await request<any>('/dashboard');
   return res['message'];
 };
 
@@ -33,19 +32,9 @@ export const getServerSideProps = async () => {
   }
 };
 const Home = ({data}: {data : any}) => {
-  const repoUrl = 'https://github.com/ingyeoking13'
   return (
     <Paper className={styles.main}>
-      <AppBar>
-        <Toolbar >
-          <Link href={repoUrl} target='_blank'>
-            <IconButton>
-              <GitHubIcon htmlColor='#fff' />
-            </IconButton>
-          </Link>
-          <Link href='/my'>hi</Link>
-        </Toolbar>
-      </AppBar>
+      <AppBarComponent />
       <Box>
         <Typography>
           Pod Status
