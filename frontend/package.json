@@ -1,5 +1,6 @@
 {
   "name": "yh-portfolio",
+  "packageManager": "yarn@4.0.2",
   "version": "0.1.0",
   "private": true,
   "scripts": {

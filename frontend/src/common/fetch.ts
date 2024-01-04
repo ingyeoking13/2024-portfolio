@@ -4,8 +4,8 @@ interface Request {
     method: string;
 }
 
-export const Request = async <T>(arg: Request | string):Promise<T> => {
-    const baseURL = '127.0.0.1' //window.location.hostname
+export const request = async <T>(arg: Request | string):Promise<T> => {
+    const baseURL = window.location.hostname
     if (typeof(arg) ==  'string') {
         const apiURL = arg.startsWith('/')? arg : `/${arg}`;
         return await(
@@ -17,6 +17,9 @@ export const Request = async <T>(arg: Request | string):Promise<T> => {
     const result = await fetch(
         `http://${baseURL}:8000${apiURL}`,
         {
+            headers: {
+                'Content-Type': 'application/json'
+            },
             method: arg.method,
             body: JSON.stringify(arg.body)
         }
