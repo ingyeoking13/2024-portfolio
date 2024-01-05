@@ -8,7 +8,6 @@ class Auth(BaseModel):
     nickname: str = Field('')
     email: str = Field('')
     password: str = Field('')
-    salt: str = Field('')
 
     class Config:
         from_attributes = True
