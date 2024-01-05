@@ -41,9 +41,7 @@ class UserRepo:
                     email=auth.email, 
                     password=bcrypt.hashpw(
                         auth.password.encode('utf-8'),
-                        salt
-                    ),
-                    salt=salt
+                        salt)
                     ))
         except Exception as e:
             _logger.exception(e)
