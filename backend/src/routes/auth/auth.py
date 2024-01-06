@@ -26,7 +26,7 @@ class AuthRouter:
         return Content(data=True)
     
     @router.post('/signin', response_model=Content)
-    async def signin(auth: Auth, 
+    async def signin(response:Response, auth: Auth, 
                      db: UserRepo = Depends(UserRepo)):
         try:
             if not db.check_user_exist(auth.name):
@@ -35,7 +35,7 @@ class AuthRouter:
                 # access_token as response. 
                 # and cookie refresh (samesite strict approach)
 
-                response = Content(data={
+                result = Content(data={
                     'access_token': jwt.encode({
                         'expire': (
                             datetime.utcnow()+timedelta(minutes=30)
@@ -58,7 +58,7 @@ class AuthRouter:
                         error_code=101,
                         error_message=e.args[0]
                 )
-        return response
+        return result
     
     @router.post('/signout', response_model=Content)
     async def logout(response: Response):
