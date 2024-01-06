@@ -23,3 +23,11 @@ logger:
 
 db:
   url: mysql+pymysql://root:adkb@localhost:3306/portfolio
+
+rate_limiter:
+  token_bucket: 
+    url: http://localhost/api/v1/rate_limiter/token_bucket
+    redis: 
+      host: localhost
+      port: 6379
+      db: 0
