@@ -15,6 +15,7 @@ app.add_middleware(
 
 k8s = K8SRouter()
 auth = AuthRouter()
+rate = RateLimiterRouter()
 app.include_router(k8s.router)
 app.include_router(auth.router)
-app.include_router(RateLimiterRouter().router)
+app.include_router(rate.router)
