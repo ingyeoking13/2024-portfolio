@@ -2,9 +2,12 @@
 
 ## system requirements
 
-os: macos
-python
-- 3.11.6 (should be 3.11.6, above version won't work - dependencies ray)
+os
+- macos     
+
+python  
+- 3.11.6 (should be 3.11.6, above version won't work - dependencies ray)   
+
 docker
 - redis  
 - mysql  
@@ -19,9 +22,9 @@ minikube, helm
 
 ## 처리율 제한 장치
 
-기능 - 처리율 제한 장치
-요구사항 - docker(redis), ray(python 3.11.6)
-구현사항 - token bucket algorithm
+기능 - 처리율 제한 장치  
+요구사항 - docker(redis), ray(python 3.11.6)  
+구현사항 - token bucket algorithm  
 
 ## minikube-start
 
