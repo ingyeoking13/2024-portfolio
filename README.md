@@ -1,12 +1,29 @@
 # 2023-portfolio
 
-## pre-condition
+## system requirements
 
 os: macos
-minikube, docker, helm
+python
+- 3.11.6 (should be 3.11.6, above version won't work - dependencies ray)
+docker
+- redis  
+- mysql  
+- nginx (for reverse proxy)   
+minikube, helm
 
+## 회원가입 및 인증
 
-## start
+기능 - 회원가입, 로그인, 로그아웃  
+요구사항 - docker(mysql, nginx)   
+구현사항 - refresh_token, access_token, jwt
+
+## 처리율 제한 장치
+
+기능 - 처리율 제한 장치
+요구사항 - docker(redis), ray(python 3.11.6)
+구현사항 - token bucket algorithm
+
+## minikube-start
 
 docker daemon을 활성화 한 후 
 ```
