@@ -4,9 +4,6 @@ from typing import List
 from uuid import uuid4
 from queue import Queue
 import asyncio
-from src.db.redis_controller import get_redis
-from src.utils.yaml.yaml import load_settings
-from time import time
 
 @ray.remote
 class CenteredActor:
@@ -16,9 +13,6 @@ class CenteredActor:
         self.cond = asyncio.Condition()
 
     async def running(self):
-        r = get_redis(
-            **load_settings()['ray']['redis']
-        )
         while True:
             async with self.cond:
                 finished_items, waitings =\
@@ -26,17 +20,7 @@ class CenteredActor:
                 await asyncio.sleep(0.1)
                 self.running_handles = waitings
 
-                if finished_items:
-                    for fin_item in finished_items:
-                        await r.zadd(f'{fin_item}', {
-                            'fin': time()
-                        })
-
-
     async def watch(self):
-        r = get_redis(
-            **load_settings()['ray']['redis']
-        )
         while True:
             await asyncio.sleep(0.1)
             try:
@@ -48,20 +32,18 @@ class CenteredActor:
             running_handle = ray_instance.run.remote(
                 **kwargs
             )
-            await r.zadd(f'{running_handle}', {
-                'run': time()
-            })
+
             async with self.cond:
                 self.running_handles.append(running_handle)
 
-    async def push(self, ray_handle: ray.actor.ActorClass,
-                   **kwargs
+    async def push(self, ray_cls: ray.actor.ActorClass,
+                   *args, **kwargs
                    ):
         id = str(uuid4())
-        ray_instance = ray_handle.options(
+        ray_instance = ray_cls.options(
             name=id,
             num_cpus=0.1
-        ).remote()
+        ).remote(id, *args)
         async with self.cond:
             self.waiting_queue.put((id,ray_instance, kwargs))
         return id
