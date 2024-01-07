@@ -18,7 +18,11 @@ class RateLimiterRouter:
     @router.post('/token_bucket')
     async def token_bucket():
         url = load_settings()['rate_limiter']['token_bucket']['url']
-        unique_id = await create_actor(RequestUser, url=url)
+        unique_id = [
+            await create_actor(RequestUser, url=url) 
+            for _
+            in range(100)
+        ]
         print(unique_id)
         return unique_id
     
@@ -28,7 +32,7 @@ class RateLimiterRouter:
             **load_settings()['rate_limiter']['token_bucket']['redis']
         )
         val = await r.get('token_bucket') or 0
-        if int(val) >= 100:
+        if int(val) >= 15:
             response.status_code = 429
             return False
 
@@ -43,5 +47,4 @@ class RateLimiterRouter:
     @router.get('/status/token_bucket')
     async def token_bucket_status():
         pass
-
 

@@ -10,7 +10,13 @@ class RequestUser(ChildActor):
         pass
 
     async def job(self, url):
+        results = await self.request(url)
+        return results
+   
+    async def request(self, url):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 print(response.status)
                 return response.status
+ 
+
