@@ -6,9 +6,13 @@ class ChildActor:
 
     def __init__(self) -> None:
         self.parent = None
+        self._status = 15
 
     async def run(self, **kwargs):
-        await self.job(**kwargs)
+        result = await self.job(**kwargs)
+
+    def status(self):
+        return self._status
 
 async def create_actor(cls: ChildActor, **kwargs):
     centered_actor = get_center_actor()

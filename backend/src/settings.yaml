@@ -31,3 +31,9 @@ rate_limiter:
       host: localhost
       port: 6379
       db: 0
+
+ray:
+  redis:
+    host: localhost
+    port: 6379
+    db: 15
