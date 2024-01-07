@@ -18,11 +18,7 @@ class RateLimiterRouter:
     @router.post('/token_bucket')
     async def token_bucket():
         url = load_settings()['rate_limiter']['token_bucket']['url']
-        unique_id = [
-            await create_actor(RequestUser, url=url) 
-            for _
-            in range(100)
-        ]
+        unique_id = await create_actor(RequestUser, url=url) 
         print(unique_id)
         return unique_id
     
