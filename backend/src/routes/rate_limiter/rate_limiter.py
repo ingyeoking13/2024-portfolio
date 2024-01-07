@@ -1,5 +1,5 @@
 from src.models.response.response import Content
-from fastapi import APIRouter, Depends, Cookie, Response
+from fastapi import APIRouter, Depends, Cookie, Response, WebSocket
 from datetime import datetime, timedelta
 from src.utils.yaml.yaml import load_settings
 from src.db.redis_controller import get_redis
@@ -19,7 +19,6 @@ class RateLimiterRouter:
     async def token_bucket():
         url = load_settings()['rate_limiter']['token_bucket']['url']
         unique_id = await create_actor(RequestUser, url=url) 
-        print(unique_id)
         return unique_id
     
     @router.get('/token_bucket')
@@ -40,7 +39,16 @@ class RateLimiterRouter:
         await r.decrby('token_bucket')
         return result
     
-    @router.get('/status/token_bucket')
-    async def token_bucket_status():
-        pass
+    @router.websocket('/status/token_bucket')
+    async def token_bucket_status(websocket: WebSocket, id: str):
+        r = get_redis(
+            **load_settings()['rate_limiter']['token_bucket']['redis']
+        )
+        await websocket.accept()
+        r.xgroup_create(id, groupname=f'g-{id}')
+        while True:
+            message = r.xreadgroup(f'g-{id}', f'c-{id}', {'stream': '>'})
+            print(message)
+            r.xack(id, f'g-{id}',message[1])
+            await websocket.send_text(message)
 
