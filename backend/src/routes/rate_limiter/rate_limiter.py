@@ -1,4 +1,5 @@
 from src.models.response.response import Content
+from typing import cast
 from fastapi import APIRouter, Depends, Cookie, Response, WebSocket
 from datetime import datetime, timedelta
 from src.utils.yaml.yaml import load_settings
@@ -44,18 +45,22 @@ class RateLimiterRouter:
         r = get_redis(
             **load_settings()['ray']['redis']
         )
-        try:
-            await r.xgroup_destroy(id, f'g-{id}')
-            await r.xgroup_create(id, groupname=f'g-{id}')
-        except:
-            return None
-        await websocket.accept()
-        while True:
-            message = await r.xreadgroup(
-                f'g-{id}', f'c-{id}', {id: '>'}
-            )
-            await asyncio.sleep(0.1)
-            print(message)
-            # r.xack(id, f'g-{id}',message[1])
-            await websocket.send_text(f'{message}')
 
+        await websocket.accept()
+        time = 0
+        while True:
+            message = await r.xread(
+                {id: time}
+            )
+            if not message:
+                continue
+            list_data = [
+                {
+                    'time': data[0].decode().split('-')[0],
+                    'name': data[1][b'name'].decode(),
+                    'status': data[1][b'status'].decode(),
+                    'result': data[1][b'result'].decode(),
+                }
+                for data in message[0][1]]
+            time = int(list_data[-1]['time']) + 1
+            await websocket.send_json(list_data)

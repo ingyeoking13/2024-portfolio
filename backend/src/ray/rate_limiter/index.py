@@ -16,7 +16,7 @@ class RequestUser(ChildActor):
     async def job(self, url):
         results = []
         clses = []
-        for _ in range(10):
+        for _ in range(1000):
             clses.append(RequestChildUser.remote(str(uuid4()), self.id))
 
         call_on_another_worker(clses, url=url)
