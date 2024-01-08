@@ -15,11 +15,11 @@ expire_minutes = 30
 class RateLimiterRouter:
     router = APIRouter(prefix='/v1/rate_limiter')
 
-    @router.post('/token_bucket')
+    @router.post('/token_bucket', response_model=Content)
     async def token_bucket():
         url = load_settings()['rate_limiter']['token_bucket']['url']
         unique_id = await create_actor(RequestUser, url=url) 
-        return unique_id
+        return Content(data=unique_id)
     
     @router.get('/token_bucket')
     async def token_bucket_get(response: Response):
@@ -42,13 +42,20 @@ class RateLimiterRouter:
     @router.websocket('/status/token_bucket')
     async def token_bucket_status(websocket: WebSocket, id: str):
         r = get_redis(
-            **load_settings()['rate_limiter']['token_bucket']['redis']
+            **load_settings()['ray']['redis']
         )
+        try:
+            await r.xgroup_destroy(id, f'g-{id}')
+            await r.xgroup_create(id, groupname=f'g-{id}')
+        except:
+            return None
         await websocket.accept()
-        r.xgroup_create(id, groupname=f'g-{id}')
         while True:
-            message = r.xreadgroup(f'g-{id}', f'c-{id}', {'stream': '>'})
+            message = await r.xreadgroup(
+                f'g-{id}', f'c-{id}', {id: '>'}
+            )
+            await asyncio.sleep(0.1)
             print(message)
-            r.xack(id, f'g-{id}',message[1])
-            await websocket.send_text(message)
+            # r.xack(id, f'g-{id}',message[1])
+            await websocket.send_text(f'{message}')
 
