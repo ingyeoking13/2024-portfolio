@@ -57,12 +57,19 @@ export const AppBarComponent = () => {
           </IconButton>
         </Link>
         <Box>
-          <Button onClick={handleClick} variant="contained" disableElevation>
+          <Button
+            onClick={handleClick}
+            variant="contained"
+            value={1}
+            disableElevation
+          >
             <Typography>인증</Typography>
           </Button>
           <Menu
             anchorEl={anchorElement}
-            open={Boolean(anchorElement)}
+            open={Boolean(
+              anchorElement && anchorElement.getAttribute("value") == "1"
+            )}
             onClose={() => setAnchorElement(null)}
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           >
@@ -85,6 +92,34 @@ export const AppBarComponent = () => {
                 </Button>
               </MenuItem>
             )}
+          </Menu>
+        </Box>
+        <Box>
+          <Button
+            onClick={handleClick}
+            variant="contained"
+            value={2}
+            disableElevation
+          >
+            <Typography>처리율 제한 장치</Typography>
+          </Button>
+          <Menu
+            anchorEl={anchorElement}
+            open={Boolean(
+              anchorElement && anchorElement.getAttribute("value") === "2"
+            )}
+            onClose={() => setAnchorElement(null)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <MenuItem>
+              <Button
+                href="/rate_limiter/token_bucket"
+                color="primary"
+                LinkComponent={Link}
+              >
+                토큰 버킷 알고리즘
+              </Button>
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

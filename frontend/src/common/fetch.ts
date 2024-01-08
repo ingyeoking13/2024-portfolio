@@ -9,6 +9,13 @@ export interface Response {
     error_message: string;
 }
 
+export interface RayEventResponse {
+  name: string;
+  result: any;
+  status: string;
+  time: string;
+}
+
 export const request = async <T>(arg: Request | string):Promise<T> => {
     const baseURL = window.location.hostname
     if (typeof(arg) ==  'string') {
