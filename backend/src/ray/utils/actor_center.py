@@ -4,6 +4,9 @@ from typing import List
 from uuid import uuid4
 from queue import Queue
 import asyncio
+from src.utils.logger.logger import get_logger
+
+_logger = get_logger(__file__, 'ray')
 
 @ray.remote
 class CenteredActor:
@@ -11,14 +14,6 @@ class CenteredActor:
         self.waiting_queue:Queue = Queue()
         self.running_handles:List[ray.ObjectRef] = []
         self.cond = asyncio.Condition()
-
-    async def running(self):
-        while True:
-            async with self.cond:
-                finished_items, waitings =\
-                    ray.wait(self.running_handles, timeout=0.1)
-                await asyncio.sleep(0.1)
-                self.running_handles = waitings
 
     async def watch(self):
         while True:
@@ -29,12 +24,10 @@ class CenteredActor:
                 )
             except:
                 continue
-            running_handle = ray_instance.run.remote(
+            ray_instance.run.remote(
                 **kwargs
             )
 
-            async with self.cond:
-                self.running_handles.append(running_handle)
 
     async def push(self, ray_cls: ray.actor.ActorClass,
                    *args, **kwargs
@@ -56,9 +49,13 @@ def get_center_actor():
             name='CenteredActor', lifetime='detached'
         ).remote()
         instance.watch.remote()
-        instance.running.remote()
+        # instance.running.remote()
         handle = ray.get_actor('CenteredActor')
     return handle
 
+def ray_setting():
+    if not ray.is_initialized():
+        ray.init()
 
+ray_setting()
 get_center_actor()

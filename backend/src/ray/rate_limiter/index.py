@@ -2,7 +2,10 @@ import ray
 import asyncio
 import aiohttp
 import requests
-from src.ray.utils.actor_child import ChildActor, create_actor
+from src.ray.utils.actor_child import (
+    ChildActor, create_actor, call_on_another_worker
+)
+from uuid import uuid4
 
 
 @ray.remote(num_cpus=0.1)
@@ -11,12 +14,14 @@ class RequestUser(ChildActor):
         super().__init__(id)
 
     async def job(self, url):
-        for _ in range(100):
-            await create_actor(
-                RequestChildUser, 
-                self.id,
-                url=url
-            )
+        results = []
+        clses = []
+        for _ in range(10):
+            clses.append(RequestChildUser.remote(str(uuid4()), self.id))
+
+        call_on_another_worker(clses, url=url)
+
+        return results
 
 @ray.remote(num_cpus=1)
 class RequestChildUser(ChildActor):
