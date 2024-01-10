@@ -1,11 +1,9 @@
 import ray 
 import ray.actor
-from typing import cast
 from src.ray.utils.actor_center import get_center_actor
 from src.db.redis_controller import get_redis
 from src.utils.yaml.yaml import load_settings
 from src.utils.logger.logger import get_logger
-from time import time
 
 _logger = get_logger(__file__, 'ray')
 
@@ -42,7 +40,7 @@ class ChildActor:
             'status': 'fin'
         })
 
-        return None
+        return (self.id, result)
 
 async def create_actor(cls: ChildActor, *args, **kwargs):
     centered_actor = get_center_actor()
@@ -51,6 +49,19 @@ async def create_actor(cls: ChildActor, *args, **kwargs):
     )
     return unique_id
 
-def call_on_another_worker(args: list[ray.actor.ActorHandle], **kwargs):
+async def call_on_another_worker(args: list[ray.actor.ActorHandle], **kwargs):
     actor_handles = args
-    return ray.get([handle.run.remote(**kwargs) for handle in actor_handles])
+    running = [
+        handle.run.remote(**kwargs)
+        for handle in actor_handles
+    ]
+    results = []
+    while running:
+        fin, unfin = ray.wait(running)
+        running = unfin
+        for _fin in fin:
+            actor_id, result = ray.get(_fin)
+            ray.kill(ray.get_actor(actor_id))
+            results.append(result)
+
+    return results
