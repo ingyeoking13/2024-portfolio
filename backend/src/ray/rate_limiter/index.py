@@ -23,7 +23,7 @@ class RequestUser(ChildActor):
         results = await call_on_another_worker(actor_clses, url=url)
         return (self.id, results)
 
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=0.2)
 class RequestChildUser(ChildActor):
     def __init__(self,id,parent_id) -> None:
         super().__init__(id, parent_id)

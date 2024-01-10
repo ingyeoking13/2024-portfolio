@@ -27,7 +27,7 @@ class CenteredActor:
             (actor_id, result)= ray.get(ray_instance.run.remote(
                 **kwargs
             ))
-            ray.kill(actor_id)
+            ray.kill(ray.get_actor(actor_id))
 
 
     async def push(self, ray_cls: ray.actor.ActorClass,
