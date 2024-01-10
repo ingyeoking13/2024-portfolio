@@ -24,9 +24,10 @@ class CenteredActor:
                 )
             except:
                 continue
-            ray_instance.run.remote(
+            (actor_id, result)= ray.get(ray_instance.run.remote(
                 **kwargs
-            )
+            ))
+            ray.kill(actor_id)
 
 
     async def push(self, ray_cls: ray.actor.ActorClass,
@@ -53,9 +54,4 @@ def get_center_actor():
         handle = ray.get_actor('CenteredActor')
     return handle
 
-def ray_setting():
-    if not ray.is_initialized():
-        ray.init()
-
-ray_setting()
 get_center_actor()

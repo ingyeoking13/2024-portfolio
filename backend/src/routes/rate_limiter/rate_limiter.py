@@ -28,7 +28,7 @@ class RateLimiterRouter:
             **load_settings()['rate_limiter']['token_bucket']['redis']
         )
         val = await r.get('token_bucket') or 0
-        if int(val) >= 15:
+        if int(val) >= 5:
             response.status_code = 429
             return False
 
