@@ -9,9 +9,11 @@ _logger = get_logger(__file__, 'ray')
 
 class ChildActor:
 
-    def __init__(self, id, parent_id = None) -> None:
+    def __init__(self, id, domain, sub_domain, parent_id = None) -> None:
         self.parent = None
         self.id = id
+        self.domain = domain
+        self.sub_domain = sub_domain
         self.parent_id = parent_id
     
     @property
@@ -23,9 +25,12 @@ class ChildActor:
             **load_settings()['ray']['redis']
         )
         _logger.info(f'{self.key} run')
+        start = ''
+        if self.key == self.id: 
+            start = 'start'
         await r.xadd(self.key, {
             'name': self.id,
-            'result': '',
+            'result': start,
             'status': 'run'
         })
 
