@@ -12,8 +12,10 @@ from uuid import uuid4
 @ray.remote(num_cpus=0.1)
 class RequestUser(ChildActor):
     def __init__(self, id, domain, sub_domain) -> None:
-        super().__init__(id, domain, sub_domain)
+        super().__init__(id)
         self.type = 'RequestUser'
+        self.domain = domain
+        self.sub_domain = sub_domain
 
     async def job(self, url):
         actor_clses = []
@@ -38,7 +40,9 @@ class RequestUser(ChildActor):
             )
 
         results = await call_on_another_worker(actor_clses, url=url)
-        job.result = results
+        job.result = {
+            'result': results
+        } 
         job.end_time = datetime.now()
 
         repo.set_result(
@@ -49,7 +53,7 @@ class RequestUser(ChildActor):
 
 @ray.remote(num_cpus=0.2)
 class RequestChildUser(ChildActor):
-    def __init__(self,id,parent_id) -> None:
+    def __init__(self, id, parent_id) -> None:
         super().__init__(id, parent_id)
     
     async def job(self, url):
