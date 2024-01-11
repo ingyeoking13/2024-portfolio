@@ -1,10 +1,13 @@
 from src.models.response.response import Content
-from typing import cast, Optional
+from typing import cast, Optional, List
 from fastapi import APIRouter, Response, WebSocket
 from src.repository.actor_job.repo import ActorJobRepo
+from src.models.job.actor_job import ActorJob
 from src.utils.yaml.yaml import load_settings
 from src.db.redis_controller import get_redis
 from src.ray.utils.actor_child import create_actor
+from src.service.algorithm.rate_limiter.limiter import APILimiter
+from src.service.algorithm.rate_limiter.token_bucket import TokenBucket
 import asyncio
 import ray
 
@@ -26,28 +29,16 @@ class RateLimiterRouter:
         return Content(data=unique_id)
     
     @router.get('/token_bucket/job')
-    async def token_bucket_job(response: Response):
-        r = get_redis(
-            **load_settings()['rate_limiter']['token_bucket']['redis']
-        )
-        val = await r.get('token_bucket') or 0
-        if int(val) >= 5:
-            response.status_code = 429
-            return False
-
-        await r.incrby('token_bucket')
-
+    @APILimiter(TokenBucket)
+    async def token_bucket_job():
         await asyncio.sleep(10)
-        result = True
-
-        await r.decrby('token_bucket')
-        return result
+        return True
     
-    @router.get('/token_bucket')
+    @router.get('/token_bucket', response_model=Content[List[ActorJob]])
     async def token_bucket_get(response: Response, 
                                domain: str, sub_domain: Optional[str] = None):
         results = ActorJobRepo().get_job(domain, sub_domain)
-        return results
+        return Content(data=results)
 
     
     @router.websocket('/status/token_bucket')
