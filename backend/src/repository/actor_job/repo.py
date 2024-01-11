@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import Session
 from src.utils.yaml.yaml import load_settings
 from src.dao.job.actor_job import ActorJob
+from src.dao.utils import to_pydantic
 from src.models.job.actor_job import ActorJob as actorJob
 from src.utils.logger.logger import get_logger
 
@@ -40,7 +41,9 @@ class ActorJobRepo:
                     start_time=job.start_time, 
                     end_time=job.end_time,
                     result=job.result,
-                    type=job.type
+                    type=job.type,
+                    domain=job.domain,
+                    sub_domain=job.sub_domain
                     )
                 )
         except Exception as e:
@@ -57,3 +60,15 @@ class ActorJobRepo:
                 ActorJob.end_time: job.end_time
             })
         return True
+    
+    def get_job(self, domain, sub_domain):
+        with self.session as session:
+            results = session.query(ActorJob)
+
+            if domain is not None:
+                results = results.filter(ActorJob.domain == domain)
+            if sub_domain is not None:
+                results = results.filter(ActorJob.sub_domain == sub_domain)
+            
+            results = results.all()
+            return [actorJob(**to_pydantic(item)) for item in results]

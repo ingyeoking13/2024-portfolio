@@ -26,7 +26,7 @@ db:
 
 rate_limiter:
   token_bucket: 
-    url: http://localhost/api/v1/rate_limiter/token_bucket
+    url: http://localhost/api/v1/rate_limiter/token_bucket/job
     redis: 
       host: localhost
       port: 6379

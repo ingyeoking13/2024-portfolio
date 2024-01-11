@@ -1,7 +1,7 @@
 from src.models.response.response import Content
-from typing import cast
-from fastapi import APIRouter, Depends, Cookie, Response, WebSocket
-from datetime import datetime, timedelta
+from typing import cast, Optional
+from fastapi import APIRouter, Response, WebSocket
+from src.repository.actor_job.repo import ActorJobRepo
 from src.utils.yaml.yaml import load_settings
 from src.db.redis_controller import get_redis
 from src.ray.utils.actor_child import create_actor
@@ -25,8 +25,8 @@ class RateLimiterRouter:
                                        url=url)
         return Content(data=unique_id)
     
-    @router.get('/token_bucket')
-    async def token_bucket_get(response: Response):
+    @router.get('/token_bucket/job')
+    async def token_bucket_job(response: Response):
         r = get_redis(
             **load_settings()['rate_limiter']['token_bucket']['redis']
         )
@@ -42,6 +42,13 @@ class RateLimiterRouter:
 
         await r.decrby('token_bucket')
         return result
+    
+    @router.get('/token_bucket')
+    async def token_bucket_get(response: Response, 
+                               domain: str, sub_domain: Optional[str] = None):
+        results = ActorJobRepo().get_job(domain, sub_domain)
+        return results
+
     
     @router.websocket('/status/token_bucket')
     async def token_bucket_status(websocket: WebSocket, id: str):
