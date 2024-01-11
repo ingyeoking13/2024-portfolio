@@ -31,6 +31,8 @@ rate_limiter:
       host: localhost
       port: 6379
       db: 0
+    fill_rate: 30
+    capacity: 60
 
 ray:
   redis:
@@ -59,3 +61,4 @@ ray:
     root:
       level: DEBUG
       handlers: [console]
+
