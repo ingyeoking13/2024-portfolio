@@ -7,15 +7,25 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
+interface RateLimiterJobResult {
+  name: string;
+  start_time: Date;
+  end_time: Date;
+  result: {
+    result: number[]
+  }
+}
+
 const TokenBucketPage = () => {
     const [tokenId, setTokenId] = useState<string>('');
     const [log, setLog] = useState<string>('');
     const [isWorking, setIsWorking] = useState<boolean>(false);
+    const [results, setResults] = useState<RateLimiterJobResult[]>();
+
     const columns = [
       '수행 ID',
       '요청 시간',
       '완료 시간',
-      '요청 중',
       '성공 ( 200 )',
       '요청 거부 ( 429 )'
     ]
@@ -33,6 +43,17 @@ const TokenBucketPage = () => {
         setTokenId(data);
       }
     };
+
+    useEffect(()=>{
+      (async ()=>{
+        const { data } = (await request(
+          "/rate_limiter/token_bucket" +
+            "?domain=rate_limiter&sub_domain=token_bucket"
+        )) as Response;
+        setResults(data as RateLimiterJobResult[])
+      })()
+
+    },[])
 
     useEffect(()=>{
         setLog('')
@@ -125,11 +146,29 @@ const TokenBucketPage = () => {
                 <TableHead>
                   <TableRow>
                     {_.map(columns, (column) => (
-                      <TableCell>{column}</TableCell>
+                      <TableCell key={column}>{column}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody></TableBody>
+                <TableBody>
+                  {_.map(results, (item) => (
+                    <TableRow>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>
+                        {dayjs(item.start_time).format("YYYY-MM-DDTHH:mm:ss")}
+                      </TableCell>
+                      <TableCell>
+                        {dayjs(item.end_time).format("YYYY-MM-DDTHH:mm:ss")}
+                      </TableCell>
+                      <TableCell>
+                        {item.result.result.filter(item => item == 200).length}
+                      </TableCell>
+                      <TableCell>
+                        {item.result.result.filter(item => item == 429).length}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
             </TableContainer>
           </Box>
