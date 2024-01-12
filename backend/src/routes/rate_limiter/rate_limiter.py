@@ -29,8 +29,17 @@ class RateLimiterRouter:
                                        url=url)
         return Content(data=unique_id)
     
-    @router.get('/token_bucket', response_model=Content[List[ActorJob]])
-    async def token_bucket_get(response: Response, 
+    @router.post('/leaky_bucket', response_model=Content)
+    async def leaky_bucket():
+        url = load_settings()['rate_limiter']['leaky_bucket']['url']
+        unique_id = await create_actor(RequestUser, 
+                                       'rate_limiter', 
+                                       'leaky_bucket', 
+                                       url=url)
+        return Content(data=unique_id)
+    
+    @router.get('', response_model=Content[List[ActorJob]])
+    async def result_get(response: Response, 
                                domain: str, sub_domain: Optional[str] = None):
         results = ActorJobRepo().get_job(domain, sub_domain)
         return Content(data=results)

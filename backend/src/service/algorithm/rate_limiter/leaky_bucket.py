@@ -26,15 +26,15 @@ class LeakyBucket:
             ['last_done', 'count']
         )
         last_done = float(last_done or 0)
-        count = int(count or 0)
+        count = float(count or 0)
 
         time_elapsed = current_time - last_done
         conversion_count = time_elapsed * self.setting.outflow_rate
 
         if max(0, count - conversion_count) < self.setting.capacity:
-            await self.r.hmset(self.key, {
+            await self.r.hset(self.key, mapping={
                 'last_done': current_time,
-                'count': max(0, int(count - conversion_count))
+                'count': max(0, count - conversion_count) + 1
             })
             return True
         else:
