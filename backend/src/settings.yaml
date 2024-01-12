@@ -39,7 +39,7 @@ rate_limiter:
       host: localhost
       port: 6379
       db: 0
-    outflow_rate: 1
+    outflow_rate: 0.1
     capacity: 60
 
 ray:
