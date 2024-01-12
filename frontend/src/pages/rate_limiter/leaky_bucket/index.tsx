@@ -1,4 +1,3 @@
-
 import { RayEventResponse, Response, request } from '@@/common/fetch';
 import { AppBarComponent } from '@@/components/AppBar';
 import { Label } from '@mui/icons-material';
@@ -16,7 +15,7 @@ interface RateLimiterJobResult {
   }
 }
 
-const TokenBucketPage = () => {
+const LeakyBucketPage = () => {
     const [tokenId, setTokenId] = useState<string>('');
     const [log, setLog] = useState<string>('');
     const [isWorking, setIsWorking] = useState<boolean>(false);
@@ -35,7 +34,7 @@ const TokenBucketPage = () => {
     ) => {
       event.preventDefault();
       const { data } = (await request({
-        url: "/rate_limiter/token_bucket",
+        url: "/rate_limiter/leaky_bucket",
         method: "POST",
         body: "",
       })) as Response;
@@ -48,7 +47,7 @@ const TokenBucketPage = () => {
       (async ()=>{
         const { data } = (await request(
           "/rate_limiter" +
-            "?domain=rate_limiter&sub_domain=token_bucket"
+            "?domain=rate_limiter&sub_domain=leaky_bucket"
         )) as Response;
         setResults(data as RateLimiterJobResult[])
       })()
@@ -104,7 +103,7 @@ const TokenBucketPage = () => {
             mt: 10,
           }}
         >
-          <Typography variant="h4">토큰 버킷 알고리즘</Typography>
+          <Typography variant="h4">누출 버킷 알고리즘</Typography>
           <Box
             sx={{
               border: 1,
@@ -184,4 +183,4 @@ const TokenBucketPage = () => {
     );
 }
 
-export default TokenBucketPage;
+export default LeakyBucketPage;

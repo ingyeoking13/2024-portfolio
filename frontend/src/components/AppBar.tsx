@@ -120,6 +120,15 @@ export const AppBarComponent = () => {
                 토큰 버킷 알고리즘
               </Button>
             </MenuItem>
+            <MenuItem>
+              <Button
+                href="/rate_limiter/leaky_bucket"
+                color="primary"
+                LinkComponent={Link}
+              >
+                누출 버킷 알고리즘
+              </Button>
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>
