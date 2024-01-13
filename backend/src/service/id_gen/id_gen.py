@@ -18,12 +18,6 @@ class Id:
     def __repr__(self):
         return f'{self.sign}-{self.timestamp}-{self.data_center}' +\
                 f'{self.server_id}-{self.seq}'
-    
-    def to_serializable_dict(self):
-        return (
-            f'{hex(int(self.sign,2))}-{hex(int(self.timestamp,2))}-'+
-            f'{hex(int(self.data_center,2))}-{hex(int(self.server_id,2))}-' +
-            f'{hex(int(self.seq,2))}')
 
 class IdGenerator:
     """
