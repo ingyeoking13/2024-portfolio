@@ -37,7 +37,10 @@ class ChildActor:
         _logger.info(f'{self.key} fin')
         await r.xadd(self.key, {
             'name': self.id,
-            'result': 'done',
+            'result': (
+                'fin' if self.key == self.id
+                else 'done'
+            ),
             'status': 'fin'
         })
 

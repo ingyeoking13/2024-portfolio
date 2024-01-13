@@ -6,12 +6,12 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
-interface RateLimiterJobResult {
+interface JobResult {
   name: string;
   start_time: Date;
   end_time: Date;
   result: {
-    result: number[]
+    result: boolean
   }
 }
 
@@ -19,14 +19,13 @@ const TokenBucketPage = () => {
     const [tokenId, setTokenId] = useState<string>('');
     const [log, setLog] = useState<string>('');
     const [isWorking, setIsWorking] = useState<boolean>(false);
-    const [results, setResults] = useState<RateLimiterJobResult[]>();
+    const [results, setResults] = useState<JobResult[]>();
 
     const columns = [
       '수행 ID',
       '요청 시간',
       '완료 시간',
-      '성공 ( 200 )',
-      '요청 거부 ( 429 )'
+      '성공 ( 모든 아이디가 유일함 )',
     ]
 
     const handleSubmit = async (
@@ -34,7 +33,7 @@ const TokenBucketPage = () => {
     ) => {
       event.preventDefault();
       const { data } = (await request({
-        url: "/rate_limiter/token_bucket",
+        url: "/id_gen",
         method: "POST",
         body: "",
       })) as Response;
@@ -47,9 +46,9 @@ const TokenBucketPage = () => {
       (async ()=>{
         const { data } = (await request(
           "/rate_limiter" +
-            "?domain=rate_limiter&sub_domain=token_bucket"
+            "?domain=id_gen"
         )) as Response;
-        setResults(data as RateLimiterJobResult[])
+        setResults(data as JobResult[])
       })()
 
     },[])
@@ -103,7 +102,7 @@ const TokenBucketPage = () => {
             mt: 10,
           }}
         >
-          <Typography variant="h4">토큰 버킷 알고리즘</Typography>
+          <Typography variant="h4">snowflake 아이디 생성 알고리즘</Typography>
           <Box
             sx={{
               border: 1,
@@ -160,10 +159,7 @@ const TokenBucketPage = () => {
                         {dayjs(item.end_time).format("YYYY-MM-DDTHH:mm:ss")}
                       </TableCell>
                       <TableCell>
-                        {item.result.result.filter(item => item == 200).length}
-                      </TableCell>
-                      <TableCell>
-                        {item.result.result.filter(item => item == 429).length}
+                        {item.result.result ? "True" : "False"}
                       </TableCell>
                     </TableRow>
                   ))}
