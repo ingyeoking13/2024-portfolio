@@ -131,6 +131,34 @@ export const AppBarComponent = () => {
             </MenuItem>
           </Menu>
         </Box>
+        <Box>
+        <Button
+            onClick={handleClick}
+            variant="contained"
+            value={3}
+            disableElevation
+          >
+            <Typography>고유 아이디 생성기</Typography>
+          </Button>
+          <Menu
+            anchorEl={anchorElement}
+            open={Boolean(
+              anchorElement && anchorElement.getAttribute("value") === "3"
+            )}
+            onClose={() => setAnchorElement(null)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <MenuItem>
+              <Button
+                href="/gen_id"
+                color="primary"
+                LinkComponent={Link}
+              >
+                snowflake token
+              </Button>
+            </MenuItem>
+            </Menu>
+        </Box>
       </Toolbar>
     </AppBar>
   );
