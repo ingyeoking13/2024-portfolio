@@ -3,11 +3,11 @@ import React, {useEffect, useState} from 'react';
 import {Typography, Paper, AppBar, Toolbar, IconButton} from '@mui/material';
 import {Box} from '@mui/system';
 import {PlayCircleFilledOutlined} from '@mui/icons-material';
-import {Request} from '@@/common/fetch';
+import {request} from '@@/common/fetch';
 import {NextPage, NextPageContext} from 'next';
 
 const dashboardQuery = async () => {
-  const res = await Request<any>('/dashboard');
+  const res = await request<any>('/dashboard');
   return res['message'];
 };
 
