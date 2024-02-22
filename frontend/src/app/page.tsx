@@ -1,20 +1,28 @@
-import Image from 'next/image';
 import styles from './page.module.css';
-import { Typography, Paper, AppBar, Toolbar, IconButton } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import MainViewer from '@@/MainViewer/MainViewer';
+import Link from 'next/link';
 
-export default function Home() {
+import React from 'react';
+
+import {Typography, Paper, AppBar, Toolbar, IconButton, Box} from '@mui/material';
+import { AppBarComponent } from '@@/components/AppBar';
+
+const Home = () => {
   return (
     <Paper className={styles.main}>
-      <AppBar>
-        <Toolbar >
-          <IconButton>
-            <GitHubIcon htmlColor='#fff' />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <MainViewer />
+      <AppBarComponent />
+      <Box>
+        <Typography>
+          Pod Status
+        </Typography>
+        <Typography>
+          Pod Ip : ..
+          namespace: ..
+
+        </Typography>
+      </Box>
     </Paper>
   );
 }
+
+export default Home;

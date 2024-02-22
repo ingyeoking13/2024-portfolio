@@ -1,0 +1,72 @@
+logger:
+  version: 1
+  disable_existing_loggers: False
+  formatters:
+    simple:
+      format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    file:
+      filename: ${{ base_log_path }}:logfile.log
+      class: logging.handlers.RotatingFileHandler
+      level: DEBUG
+      formatter: simple
+      maxBytes: 1000000
+      backupCount: 5
+  root:
+    level: DEBUG
+    handlers: [console, file]
+
+db:
+  url: mysql+pymysql://root:adkb@localhost:3306/portfolio
+
+rate_limiter:
+  token_bucket: 
+    url: http://localhost/api/v1/rate_limiter/token_bucket/job
+    redis: 
+      host: localhost
+      port: 6379
+      db: 0
+    fill_rate: 30
+    capacity: 60
+  leaky_bucket:
+    url: http://localhost/api/v1/rate_limiter/leaky_bucket/job
+    redis: 
+      host: localhost
+      port: 6379
+      db: 0
+    outflow_rate: 0.1
+    capacity: 60
+
+ray:
+  redis:
+    host: localhost
+    port: 6379
+    db: 15
+  logger:
+    version: 1
+    disable_existing_loggers: False
+    formatters:
+      simple:
+        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        level: DEBUG
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        filename: ${{ base_log_path }}:logfile.log
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: simple
+        maxBytes: 1000000
+        backupCount: 5
+    root:
+      level: DEBUG
+      handlers: [console]
+

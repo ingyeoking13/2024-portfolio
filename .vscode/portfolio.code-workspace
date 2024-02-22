@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"name": "frontend",
+			"path": "../frontend/"
+		},
+		{
+			"name": "backend",
+			"path": "../backend/"
+		},
+		{
+			"name": "charts",
+			"path": "../charts/"
+		}
+	],
+	"settings": {
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.python"
+		},
+		"python.formatting.provider": "none"
+	}
+}
