@@ -32,7 +32,7 @@ class RequestUser(ChildActor):
             job
         )
 
-        for _ in range(500):
+        for _ in range(50):
             id = str(uuid4())
             actor_clses.append(RequestChildUser.options(
                     name=id

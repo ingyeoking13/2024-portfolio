@@ -16,8 +16,10 @@ def test_load_yaml(monkeypatch):
             env: ${{ exist_env }}
             source: ${{ none_env}}:noworld
         test3: 
-            name: ${{ exist_env }}/log.log
-            env: ${{ none_env}}/log.log:log.log
+            inner:
+                inner:
+                    name: ${{ exist_env }}/log.log
+                    env: ${{ none_env}}/log.log:log.log
     """
     monkeypatch.setenv('exist_env', 'hello world')
     result = replace_env_from_yaml(yaml.safe_load(_yaml))
@@ -33,7 +35,11 @@ def test_load_yaml(monkeypatch):
             'source': 'noworld'
         },
         'test3': {
-            'name': 'hello world/log.log',
-            'env' : 'log.log'
+            'inner': {
+                'inner': {
+                    'name': 'hello world/log.log',
+                    'env' : 'log.log'
+                }
+            }
         }
     }
