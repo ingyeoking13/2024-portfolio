@@ -22,13 +22,13 @@ logger:
     handlers: [console, file]
 
 db:
-  url: mysql+pymysql://root:adkb@localhost:3306/portfolio
+  url: ${{ db_path }}:mysql+pymysql://root:adkb@localhost:3306/portfolio
 
 rate_limiter:
   token_bucket: 
     url: http://localhost/api/v1/rate_limiter/token_bucket/job
     redis: 
-      host: localhost
+      host: ${{ redis_path }}:localhost
       port: 6379
       db: 0
     fill_rate: 30
@@ -36,7 +36,7 @@ rate_limiter:
   leaky_bucket:
     url: http://localhost/api/v1/rate_limiter/leaky_bucket/job
     redis: 
-      host: localhost
+      host: ${{ redis_path }}:localhost
       port: 6379
       db: 0
     outflow_rate: 0.1
@@ -44,7 +44,7 @@ rate_limiter:
 
 ray:
   redis:
-    host: localhost
+    host: ${{ redis_path }}:localhost
     port: 6379
     db: 15
   logger:
