@@ -36,4 +36,4 @@ jobs:
             cd 2024-portfolio
             docker-compose up -d --build
             docker cp backend/scripts/nginx/default.conf nginx:/etc/nginx/conf.d
-            docker exec -T nginx /usr/sbin/nginx -s reload
+            docker exec -t nginx /usr/sbin/nginx -s reload
