@@ -34,7 +34,6 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
             cd 2024-portfolio
-            export COMPOSE_INTERACTIVE_NO_CLI=1
-            docker compose up -d
+            docker-compose up -d --build
             docker cp backend/scripts/nginx/default.conf nginx:/etc/nginx/conf.d
             docker exec -it nginx /usr/sbin/nginx -s reload
