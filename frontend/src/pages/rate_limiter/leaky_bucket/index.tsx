@@ -56,9 +56,10 @@ const LeakyBucketPage = () => {
 
     useEffect(()=>{
         setLog('')
+        const baseUrl = window.location.hostname;
         if (!tokenId) return;
         const ws = new WebSocket(
-          `ws://localhost/api/v1/rate_limiter/status/token_bucket?id=${tokenId}`
+          `ws://${baseUrl}/api/v1/rate_limiter/status/token_bucket?id=${tokenId}`
         );
         setIsWorking(true);
 

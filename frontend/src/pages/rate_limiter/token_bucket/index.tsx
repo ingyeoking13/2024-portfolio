@@ -57,8 +57,9 @@ const TokenBucketPage = () => {
     useEffect(()=>{
         setLog('')
         if (!tokenId) return;
+        const baseUrl = window.location.hostname
         const ws = new WebSocket(
-          `ws://localhost/api/v1/rate_limiter/status/token_bucket?id=${tokenId}`
+          `ws://${baseUrl}/api/v1/rate_limiter/status/token_bucket?id=${tokenId}`
         );
         setIsWorking(true);
 

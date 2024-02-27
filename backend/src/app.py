@@ -1,3 +1,4 @@
+from concurrent.futures import ProcessPoolExecutor
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.routes.k8s.connect import K8SRouter
@@ -14,6 +15,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+background_job = ProcessPoolExecutor()
 k8s = K8SRouter()
 auth = AuthRouter()
 rate = RateLimiterRouter()

@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 
-class ActorJob(BaseModel):
+class TaskJob(BaseModel):
     name: str = Field('')
     parent_name: str = Field('')
     domain: str = Field('')

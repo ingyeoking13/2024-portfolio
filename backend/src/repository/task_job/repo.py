@@ -4,20 +4,20 @@ from typing import Generator
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import Session
 from src.utils.yaml.yaml import load_settings
-from src.dao.job.actor_job import ActorJob
+from src.dao.job.task_job import TaskJob
 from src.dao.utils import to_pydantic
-from src.models.job.actor_job import ActorJob as actorJob
+from src.models.job.task_job import TaskJob as taskJob
 from src.utils.logger.logger import get_logger
 
 _logger = get_logger(__file__)
 
-class ActorJobRepo:
+class TaskJobRepo:
     def __init__(self) -> None:
         self.engine: Engine 
         self.engine = create_engine(
             **load_settings()['db']
         )
-        ActorJob.metadata.create_all(self.engine)
+        TaskJob.metadata.create_all(self.engine)
     
     @property
     @contextmanager
@@ -32,10 +32,10 @@ class ActorJobRepo:
         finally:
             session.close()
     
-    def add_job(self, job: actorJob):
+    def add_job(self, job: taskJob):
         try: 
             with self.session as session:
-                session.add(ActorJob(
+                session.add(TaskJob(
                     name=job.name,
                     parent_name=job.parent_name,     
                     start_time=job.start_time, 
@@ -51,24 +51,24 @@ class ActorJobRepo:
             raise
         return True
     
-    def set_result(self, job: actorJob) -> bool:
+    def set_result(self, job: taskJob) -> bool:
         with self.session as session:
-            result = session.query(ActorJob).filter(
-                ActorJob.name == job.name
+            result = session.query(TaskJob).filter(
+                TaskJob.name == job.name
             ).update({
-                ActorJob.result: job.result,
-                ActorJob.end_time: job.end_time
+                TaskJob.result: job.result,
+                TaskJob.end_time: job.end_time
             })
         return True
     
     def get_job(self, domain, sub_domain):
         with self.session as session:
-            results = session.query(ActorJob)
+            results = session.query(TaskJob)
 
             if domain is not None:
-                results = results.filter(ActorJob.domain == domain)
+                results = results.filter(TaskJob.domain == domain)
             if sub_domain is not None:
-                results = results.filter(ActorJob.sub_domain == sub_domain)
+                results = results.filter(TaskJob.sub_domain == sub_domain)
             
             results = results.all()
-            return [actorJob(**to_pydantic(item)) for item in results]
+            return [taskJob(**to_pydantic(item)) for item in results]
