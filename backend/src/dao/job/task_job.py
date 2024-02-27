@@ -6,8 +6,8 @@ from datetime import datetime
 
 Base = declarative_base()
 
-class ActorJob(Base):
-    __tablename__ = 'ActorJob'
+class TaskJob(Base):
+    __tablename__ = 'TaskJob'
     id: Mapped[str] = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name: Mapped[str] =  Column(String(36), index=True)
     domain: Mapped[str] = Column(String(36), index=True)

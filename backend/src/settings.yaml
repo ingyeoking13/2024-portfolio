@@ -26,7 +26,7 @@ db:
 
 rate_limiter:
   token_bucket: 
-    url: http://fastapi:8000/api/v1/rate_limiter/token_bucket/job
+    url: http://nginx/api/v1/rate_limiter/token_bucket/job
     redis: 
       host: ${{ redis_path }}:localhost
       port: 6379
@@ -34,7 +34,7 @@ rate_limiter:
     fill_rate: 30
     capacity: 60
   leaky_bucket:
-    url: http://fastapi:8000/api/v1/rate_limiter/leaky_bucket/job
+    url: http://nginx/api/v1/rate_limiter/leaky_bucket/job
     redis: 
       host: ${{ redis_path }}:localhost
       port: 6379

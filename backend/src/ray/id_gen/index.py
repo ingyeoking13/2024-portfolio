@@ -1,11 +1,10 @@
 import ray
-from src.repository.actor_job.repo import ActorJobRepo
+from src.repository.task_job.repo import TaskJobRepo
 from src.service.id_gen.id_gen import IdGenerator, Id
-from src.models.job.actor_job import ActorJob
+from src.models.job.task_job import TaskJob
 from src.ray.utils.actor_child import (
-    ChildActor, create_actor, call_on_another_worker
+    ChildActor, call_on_another_worker
 )
-from src.utils.dumps import default_serializer
 from functools import reduce
 from datetime import datetime
 from uuid import uuid4
@@ -21,8 +20,8 @@ class IdGenUser(ChildActor):
 
     async def job(self):
         actor_clses = []
-        repo = ActorJobRepo()
-        job = ActorJob(
+        repo = TaskJobRepo()
+        job = TaskJob(
             name=self.id,
             parent_name='',
             start_time=datetime.now(),
